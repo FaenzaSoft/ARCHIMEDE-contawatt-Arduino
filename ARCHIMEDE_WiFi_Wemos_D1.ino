@@ -10,7 +10,7 @@
                                 http://twitter.com/blynk_app
     Vedi anche: http://www.maffucci.it/tag/wemos-d1-mini/
     Video YoTube: in preparazione
-    Versione software: 1.0 del 13/12/2017
+    Versione software: 1.1 del 2/01/2018
 */
 #define BLYNK_PRINT Serial
 #include <ESP8266WiFi.h>
@@ -80,7 +80,7 @@ void loop()
       corrente_millis_consumi = tempo_adesso;
       tempo_trascorso_consumi = (corrente_millis_consumi - vecchio_millis_consumi);
       vecchio_millis_consumi = corrente_millis_consumi;
-      potenza_watt_consumi = 100000 / tempo_trascorso_consumi * 36 / 32;       // da modificare con contatori diversi da 3200 impulsi:
+      potenza_watt_consumi = 1000000 / tempo_trascorso_consumi * 36 / 32;       // da modificare con contatori diversi da 3200 impulsi:
     }
   }
   //
@@ -93,7 +93,7 @@ void loop()
       corrente_millis_produzione = tempo_adesso;
       tempo_trascorso_produzione = (corrente_millis_produzione - vecchio_millis_produzione);
       vecchio_millis_produzione = corrente_millis_produzione;
-      potenza_watt_produzione = 100000 / tempo_trascorso_produzione * 36 / 32;           // da modificare con contatori diversi da 3200 impulsi:
+      potenza_watt_produzione = 1000000 / tempo_trascorso_produzione * 36 / 32;           // da modificare con contatori diversi da 3200 impulsi:
     }
   }
   //
