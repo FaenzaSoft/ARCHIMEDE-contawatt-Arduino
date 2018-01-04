@@ -1,4 +1,4 @@
-// ARCHIMEDE WiFi Wemos D1 autoconsumo Ver. 1.0 del 2/01/2018
+// ARCHIMEDE WiFi Wemos D1 autoconsumo 
 // Video YouTube: https://youtu.be/gsHxTfW92mU
 /*************************************************************
     Occorre caricare nello smartphone l'APP Blynk
@@ -10,7 +10,7 @@
                                 http://twitter.com/blynk_app
     Vedi anche: http://www.maffucci.it/tag/wemos-d1-mini/
     Video YoTube: in preparazione
-    Versione software: 1.0 del 13/12/2017
+    Versione software: 1.0 del 4/1/2018
 */
 // 1) SI PUO' UTILIZZARE LA SCHEDA WEMOS D1 r1 (Retired) OPPURE LA WEMOS D1 r2, OCCORRE PERO' MODIFICARE I PIN DI ALLACCIO COME INDICATO:
 // 2) LA SCHEDA VA AGGIORNATA CON LE 4 RESISTENZE DI INTERFACCIA CON I CONTATORI DIGITALI (ESCLUSE NELLA VERSIONE SIMULATORE):
