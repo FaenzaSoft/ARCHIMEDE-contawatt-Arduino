@@ -10,7 +10,7 @@
                                 http://twitter.com/blynk_app
     Vedi anche: http://www.maffucci.it/tag/wemos-d1-mini/
     Video YoTube: in preparazione
-    Versione software: 1.0 del 4/1/2018
+    Versione software: 0.0 del 4/1/2018   (in fase di mesa a punto)
 */
 // 1) SI PUO' UTILIZZARE LA SCHEDA WEMOS D1 r1 (Retired) OPPURE LA WEMOS D1 r2, OCCORRE PERO' MODIFICARE I PIN DI ALLACCIO COME INDICATO:
 // 2) LA SCHEDA VA AGGIORNATA CON LE 4 RESISTENZE DI INTERFACCIA CON I CONTATORI DIGITALI (ESCLUSE NELLA VERSIONE SIMULATORE):
@@ -65,6 +65,7 @@ unsigned long tempo_trascorso_produzione = 0;
 unsigned long tempo_ultima_lettura_consumi = 0;
 unsigned long tempo_ultima_lettura_produzione = 0;
 unsigned long tempo_adesso = 0;
+int modifica_rilevazioni = 0;
 int conta = 100;
 //
 BlynkTimer timer;
@@ -97,7 +98,7 @@ void setup()
 }
 void loop()
 {
-  delay(10);
+  delay(10);         // questa riga dicodice può anche essere eliminata:
   Blynk.run();
   timer.run(); // Initiates BlynkTimer
   //
@@ -121,6 +122,7 @@ void loop()
       corrente_millis_consumi = tempo_adesso;
       tempo_trascorso_consumi = (corrente_millis_consumi - vecchio_millis_consumi);
       vecchio_millis_consumi = corrente_millis_consumi;
+      modifica_rilevazioni = 1;  
       // riga sottostante da togliere, per versione simulatore:
       potenza_watt_consumi = 1000000 / tempo_trascorso_consumi * 36 / 32;       // da modificare con contatori diversi da 3200 impulsi:
     }
@@ -135,6 +137,7 @@ void loop()
       corrente_millis_produzione = tempo_adesso;
       tempo_trascorso_produzione = (corrente_millis_produzione - vecchio_millis_produzione);
       vecchio_millis_produzione = corrente_millis_produzione;
+      modifica_rilevazioni = 1;    
       // riga sottostante da togliere, per versione simulatore:
       potenza_watt_produzione = 1000000 / tempo_trascorso_produzione * 36 / 32;           // da modificare con contatori diversi da 3200 impulsi:
     }
@@ -173,21 +176,26 @@ void loop()
   // fine attivazione relè a stato solido ON_OFF ************************ POMPA DI CALORE****************************************:
   //
   // attivazione relè a statosolido gestito PWM, cioè con carichi frazionali***BOILER********************************************:
-  if (potenza_watt_produzione > potenza_watt_consumi)
-  {
-    aumento = (potenza_watt_produzione - potenza_watt_consumi) * 254 / 3000;
-    ciclopwm12 = ciclopwm12 + aumento;
-  }
-  else
-  {
-    aumento = (potenza_watt_consumi - potenza_watt_produzione) * 254 / 3000;
-    ciclopwm12 = ciclopwm12 - aumento;
-  }
-  if (ciclopwm12 > 1024) ciclopwm12 = 1024;
-  if (ciclopwm12 < 1) ciclopwm12 = 1;
-  // analogWrite(D12, ciclopwm12);     // valido per r1:
-  //analogWrite(D6, ciclopwm12);     // valido per r2:
-  analogWrite(pin_pwm, ciclopwm12);     // valido per entrambe le versioni:
+  // il ritocco del carico va fatto ogni volta che arriva un nuovo impulso da contatore digitale:
+  if (modifica_rilevazioni = 1)
+    {      
+    if (potenza_watt_produzione > potenza_watt_consumi)
+    {
+      aumento = (potenza_watt_produzione - potenza_watt_consumi) * 1024 / 3000;
+      ciclopwm12 = ciclopwm12 + aumento;
+    }
+    else
+    {
+      aumento = (potenza_watt_consumi - potenza_watt_produzione) * 1024 / 3000;
+      ciclopwm12 = ciclopwm12 - aumento;
+    }
+    if (ciclopwm12 > 1023) ciclopwm12 = 1023;
+    if (ciclopwm12 < 0) ciclopwm12 = 0;
+    // analogWrite(D12, ciclopwm12);     // valido per r1:
+    //analogWrite(D6, ciclopwm12);     // valido per r2:
+    analogWrite(pin_pwm, ciclopwm12);     // valido per entrambe le versioni:
+    modifica_rilevazioni = 0;  
+    }   
   //
   // fine attivazione uscita PWM per relè a stato solido *************************************************************************:
   //
