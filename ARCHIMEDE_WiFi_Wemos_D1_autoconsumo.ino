@@ -1,4 +1,4 @@
-// ARCHIMEDE WiFi Wemos D1 autoconsumo Ver. 0.3 del 6/1/2018
+// ARCHIMEDE WiFi Wemos D1 autoconsumo Ver. 1.0 del 18/1/2018
 // Video YouTube: https://youtu.be/gsHxTfW92mU
 /*************************************************************
     Occorre caricare nello smartphone l'APP Blynk
@@ -44,6 +44,9 @@ int pin_on_off = D7;         // valido per WEMOS D1 R2 - GPIO13:
 int pin_pwm = D6;      // valido per WEMOS D1 R2 - GPIO12:
 //
 int potenza_watt_consumi = 0;
+int consumi_lettura1 = 0;
+int consumi_lettura2 = 0;
+int consumi_lettura3 = 0;
 int potenza_watt_produzione = 0;
 int buttonState_consumi = 0;
 int buttonState_produzione = 0;
@@ -122,6 +125,10 @@ void loop()
       modifica_rilevazioni = 1;
       // riga sottostante da togliere, per versione simulatore:
       potenza_watt_consumi = 1000000 / tempo_trascorso_consumi * 36 / 32;       // da modificare con contatori diversi da 3200 impulsi:
+      consumi_lettura3 = consumi_lettura2;
+      consumi_lettura2 = consumi_lettura1;
+      consumi_lettura1 = potenza_watt_consumi;
+      potenza_watt_consumi = (consumi_lettura1 + consumi_lettura2 + consumi_lettura3) / 3:  
     }
   }
   //
@@ -162,12 +169,12 @@ void loop()
   { // togliere questa parentesi per simulazione:
     if (potenza_watt_produzione > potenza_watt_consumi)        // significa che c'è un surplus:
     {
-      aumento = (potenza_watt_produzione - potenza_watt_consumi) * 1024 / 1000;
+      aumento = (potenza_watt_produzione - potenza_watt_consumi) * 1024 / 3000;
       ciclopwm1 = ciclopwm1 + aumento;
     }
     else
     {
-      aumento = (potenza_watt_consumi - potenza_watt_produzione) * 1024 / 1000;
+      aumento = (potenza_watt_consumi - potenza_watt_produzione) * 1024 / 3000;
       ciclopwm1 = ciclopwm1 - aumento;
     }
     if (ciclopwm1 > 1023) ciclopwm1 = 1023;
