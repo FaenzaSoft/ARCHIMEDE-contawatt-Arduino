@@ -10,7 +10,7 @@
                                 http://twitter.com/blynk_app
     Vedi anche: http://www.maffucci.it/tag/wemos-d1-mini/
     Video YoTube: in preparazione
-    Versione software: 1.1 del 2/01/2018
+    Versione software: 1.2 del 18/01/2018
 */
 #define BLYNK_PRINT Serial
 #include <ESP8266WiFi.h>
