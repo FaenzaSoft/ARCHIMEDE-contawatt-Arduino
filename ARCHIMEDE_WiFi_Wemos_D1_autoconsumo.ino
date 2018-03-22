@@ -128,7 +128,7 @@ void loop()
       consumi_lettura3 = consumi_lettura2;
       consumi_lettura2 = consumi_lettura1;
       consumi_lettura1 = potenza_watt_consumi;
-      potenza_watt_consumi = (consumi_lettura1 + consumi_lettura2 + consumi_lettura3) / 3:  
+      potenza_watt_consumi = (consumi_lettura1 + consumi_lettura2 + consumi_lettura3) / 3;  
     }
   }
   //
